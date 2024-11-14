@@ -1,0 +1,50 @@
+1) 
+Mostrare a video il titolo dei libri non ancora restituiti e visuallizare il nome, cogome e telefono di chi li ha ancora in possesso.
+
+SELECT Titolo, Nome, Cognome, Telefono 
+FROM UTENTE,LIBRO
+WHERE UTENTE.Matricola=LIBRO.Matricola_utente
+ AND Data_restituzione IS NULL;
+
+2)
+ Mostrare a video nome e cognome degli utenti e per  ogniuno di essi vissualizare il numero di presiti effetuati solo se questi siano maggiori di 1, il risulato deve essere in ordine descrescente secondo il numero di presiti effetuati.
+
+SELECT Nome, Cognome, COUNT(*) AS "Numero presiti effetuati"
+FROM UTENTE,LIBRO
+WHERE UTENTE.Matricola=LIBRO.Matricola_utente
+GROUP BY Nome, Cognome
+HAVING COUNT(*) > 1
+ORDER BY COUNT(*) DESC;
+
+
+3)
+Mostare a video il nome e cognome degli utenti che hanno preso in presito un libro dal 23 gennaio 2020 al 1 giugno 2021, mostrare il titolo del libro e il nome e cognome dell'autore che l'ha scritto la tabella deve avere la seguente intestazione NomeUtente, CognomeUtente, TitoloLibro, NomeAutore e CognomeAutore.
+
+SELECT UTENTE.Nome AS NomeUtente, UTENTE.Cognome AS CognomeUtente,Titolo AS TitoloLibro, AUTORE.Nome AS NomeAutore, AUTORE.Cognome AS CognomeAutore 
+FROM UTENTE,LIBRO,SCRIVE,AUTORE
+WHERE UTENTE.Matricola = LIBRO.Matricola_utente 
+AND LIBRO.Cod_libro = SCRIVE.Cod_lib
+AND SCRIVE.Cod_aut=AUTORE.Cod_autore
+AND (Data_prestito BETWEEN '2020-01-23' AND '2021-06-01');
+ 
+4) 
+Mostare a video il nome e cognome degli autori che hanno pubblicato un testo con edizione superiore alla seconda e avente prezzo superiore al costo medio considerando però solamente i libri che anno un prezzo superiore di 5 euro rispetto al libro con il valore economico più basso, in più visuallizare anche il titolo del libro.
+
+SELECT Nome, Cognome,Titolo
+FROM LIBRO,SCRIVE,AUTORE
+WHERE LIBRO.Cod_libro = SCRIVE.Cod_lib 
+AND SCRIVE.Cod_aut=AUTORE.Cod_autore
+AND Edizione > 2 AND Prezzo > 
+(
+SELECT AVG(Prezzo)
+FROM LIBRO
+WHERE Prezzo > 5 +
+(
+SELECT MIN(Prezzo)
+FROM LIBRO
+)
+);
+
+
+
+
